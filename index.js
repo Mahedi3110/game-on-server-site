@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config()
 const app = express();
 const port = process.env.PORT || 7000;
@@ -53,6 +53,42 @@ async function run() {
             const result = await addList.find().toArray();
             res.send(result);
         })
+        app.delete('/addList/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) }
+            const result = await addList.deleteOne(query);
+            res.send(result);
+        })
+
+        app.put('/addList/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: new ObjectId(id) }
+            const option = { upsert: true }
+            const updatedValue = req.body;
+            const value = {
+                $set: {
+                    photo: updatedValue.photo,
+                    name: updatedValue.name,
+                    sellerName: updatedValue.sellerName,
+                    email: updatedValue.email,
+                    category: updatedValue.category,
+                    price: updatedValue.price,
+                    rating: updatedValue.rating,
+                    quantity: updatedValue.quantity,
+                    about: updatedValue.about
+                }
+            }
+            const result = await addList.updateOne(filter, value, option);
+            res.send(result);
+        })
+
+        app.delete('/addList/:mail', async (req, res) => {
+            const mail = req.params.mail;
+            const query = { email: mail }
+            const result = await addList.deleteMany(query);
+            res.send(result);
+        })
+
         await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } finally {
