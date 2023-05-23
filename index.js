@@ -65,6 +65,7 @@ async function run() {
             const filter = { _id: new ObjectId(id) }
             const option = { upsert: true }
             const updatedValue = req.body;
+
             const value = {
                 $set: {
                     photo: updatedValue.photo,
