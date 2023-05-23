@@ -6,7 +6,16 @@ const app = express();
 const port = process.env.PORT || 7000;
 
 //middleware
-app.use(cors())
+// app.use(cors())
+
+const corsOptions = {
+    origin: '*',
+    credentials: true,
+    optionSuccessStatus: 200,
+}
+
+app.use(cors(corsOptions))
+
 app.use(express.json())
 
 // mongoDB
@@ -25,7 +34,7 @@ const client = new MongoClient(uri, {
 
 async function run() {
     try {
-        await client.connect();
+        // await client.connect();
 
         const components = client.db("gamingComponents").collection("products");
         const choiceList = client.db("choiceList").collection("products");
