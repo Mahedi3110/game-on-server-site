@@ -78,6 +78,7 @@ async function run() {
                     quantity: updatedValue.quantity,
                     about: updatedValue.about
                 }
+
             }
             const result = await addList.updateOne(filter, value, option);
             res.send(result);
